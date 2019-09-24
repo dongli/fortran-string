@@ -8,6 +8,7 @@ module string_actions_mod
 
   public count_string
   public split_string
+  public pad_string
   public replace_string
   public basename
 
@@ -102,6 +103,16 @@ contains
     end do
 
   end function split_string_1
+
+  function pad_string(str, width) result(res)
+
+    character(*), intent(in) :: str
+    integer, intent(in) :: width
+    character(width) res
+
+    res = str
+
+  end function pad_string
 
   pure function replace_string_1(str, pattern, replace) result(res)
 

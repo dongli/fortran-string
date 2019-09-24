@@ -15,15 +15,21 @@ endif ()
 set (CMAKE_Fortran_MODULE_DIRECTORY "${CMAKE_BINARY_DIR}")
 include_directories(${CMAKE_BINARY_DIR})
 
-add_subdirectory(lib/unit-test)
+if (EXISTS lib/unit-test/CMakeLists.txt)
+  set(HAS_UNIT_TEST ON)
+  add_subdirectory(lib/unit-test)
+endif ()
 
 set(sources
   src/string_mod.F90
   src/string_actions_mod.F90
+  src/string_numerics_mod.F90
   src/string.F90
 )
 
 add_library(fortran_string ${sources})
 
-add_executable(string_test.exe src/string_test.F90)
-target_link_libraries(string_test.exe fortran_string fortran_unit_test)
+if (HAS_UNIT_TEST)
+  add_executable(string_test.exe src/string_test.F90)
+  target_link_libraries(string_test.exe fortran_string fortran_unit_test)
+endif ()
