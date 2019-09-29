@@ -15,7 +15,7 @@ endif ()
 set (CMAKE_Fortran_MODULE_DIRECTORY "${CMAKE_BINARY_DIR}")
 include_directories(${CMAKE_BINARY_DIR})
 
-if (EXISTS lib/unit-test/CMakeLists.txt)
+if (EXISTS ${PROJECT_SOURCE_DIR}/lib/unit-test/CMakeLists.txt)
   set(HAS_UNIT_TEST ON)
   add_subdirectory(lib/unit-test)
 endif ()

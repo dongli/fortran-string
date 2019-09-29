@@ -47,7 +47,7 @@ contains
 
   end subroutine string_assign_rhs
 
-  function string_cat_lhs(this, str) result(res)
+  pure function string_cat_lhs(this, str) result(res)
 
     type(string_type), intent(in) :: this
     character(*), intent(in) :: str
@@ -57,7 +57,7 @@ contains
 
   end function string_cat_lhs
 
-  function string_cat_rhs(str, this) result(res)
+  pure function string_cat_rhs(str, this) result(res)
 
     character(*), intent(in) :: str
     type(string_type), intent(in) :: this

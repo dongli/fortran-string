@@ -28,7 +28,7 @@ contains
     character(range(x)+2) tmp
 
     write(tmp, '(i0)') x
-    res = tmp
+    res = trim(tmp)
 
   end function integer1_to_string
   
@@ -40,7 +40,7 @@ contains
     character(range(x)+2) tmp
 
     write(tmp, '(i0)') x
-    res = tmp
+    res = trim(tmp)
 
   end function integer2_to_string
   
@@ -52,7 +52,7 @@ contains
     character(range(x)+2) tmp
 
     write(tmp, '(i0)') x
-    res = tmp
+    res = trim(tmp)
 
   end function integer4_to_string
   
@@ -64,7 +64,7 @@ contains
     character(range(x)+2) tmp
 
     write(tmp, '(i0)') x
-    res = tmp
+    res = trim(tmp)
 
   end function integer8_to_string
 
@@ -78,72 +78,74 @@ contains
 
     write(fmt, '("(", I0, "(I0, "", ""))")') size(x)
     write(tmp, fmt) x
-    res = tmp(1:len_trim(tmp)-1)
+    res = trim(tmp)
 
   end function integer4_array_to_string
 
-  pure function real4_to_string(x, decimal_width) result(res)
+  pure function real4_to_string(x, width, decimal_width) result(res)
 
     real(4), intent(in) :: x
-    integer, intent(in), optional :: decimal_width
+    integer, intent(in) :: width
+    integer, intent(in) :: decimal_width
     character(:), allocatable :: res
 
     integer w
     character(10) fmt
     character(range(x)+2) tmp
 
-    if (present(decimal_width)) then
-      w = decimal_width
-    else
-      w = 4
-    end if
-    write(fmt, "('(g', i0, '.', i0, ')')") w+6, w
+    w = max(width, decimal_width + 1 + 5)
+    write(fmt, "('(g', i0, '.', i0, ')')") w, decimal_width + 1
     write(tmp, fmt) x
     res = trim(tmp)
 
   end function real4_to_string
 
-  pure function real8_to_string(x, decimal_width) result(res)
+  pure function real8_to_string(x, width, decimal_width) result(res)
 
     real(8), intent(in) :: x
-    integer, intent(in), optional :: decimal_width
+    integer, intent(in) :: width
+    integer, intent(in) :: decimal_width
     character(:), allocatable :: res
 
     integer w
     character(10) fmt
     character(range(x)+2) tmp
 
-    if (present(decimal_width)) then
-      w = decimal_width
-    else
-      w = 4
-    end if
-    write(fmt, "('(g', i0, '.', i0, ')')") w+6, w
+    w = max(width, decimal_width + 1 + 5)
+    write(fmt, "('(g', i0, '.', i0, ')')") w, decimal_width + 1
     write(tmp, fmt) x
     res = trim(tmp)
 
   end function real8_to_string
 
-  pure function real8_array_to_string(x, decimal_width) result(res)
+  pure function real8_array_to_string(x, width, decimal_width) result(res)
 
     real(8), intent(in) :: x(:)
-    integer, intent(in), optional :: decimal_width
+    integer, intent(in) :: width
+    integer, intent(in) :: decimal_width
     character(:), allocatable :: res
 
     integer w, i, j
-    character(256) fmt
+    character(256) s
+    character(:), allocatable :: tmp
 
-    if (present(decimal_width)) then
-      w = decimal_width
-    else
-      w = 4
-    end if
-    write(fmt, "('(g', i0, '.', i0, ')')") w+6, w
-    allocate(character((w+6)*size(x))::res)
-    j = 1
+    w = max(width, decimal_width + 1 + 5)
+    allocate(character(2+(w+1)*size(x)-1)::tmp)
+    tmp(2:len(tmp)) = ''
+    tmp(1:1) = '['
+    j = 2
     do i = 1, size(x)
-      write(res(j:j+w+6-1), fmt) x(i)
+      s = to_string(x(i), width, decimal_width)
+      tmp(j:j+len_trim(s)-1) = trim(s)
+      j = j + len_trim(s)
+      if (i /= size(x)) then
+        write(tmp(j:j), '(",")')
+        j = j + 1
+      end if
     end do
+    tmp(j:j) = ']'
+    res = trim(tmp)
+    deallocate(tmp)
 
   end function real8_array_to_string
 

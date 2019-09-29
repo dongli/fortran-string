@@ -114,7 +114,7 @@ contains
 
   end function split_string_1
 
-  function pad_string(str, width) result(res)
+  pure function pad_string(str, width) result(res)
 
     character(*), intent(in) :: str
     integer, intent(in) :: width

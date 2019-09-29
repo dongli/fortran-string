@@ -17,6 +17,8 @@ program string_test
 
   call test_string_basename()
 
+  call test_string_to_string()
+
   call test_suite_report()
 
   call test_suite_final()
@@ -101,5 +103,26 @@ contains
     call assert_equal(basename('/foo/bar/file'), 'file', __FILE__, __LINE__)
 
   end subroutine test_string_basename
+
+  subroutine test_string_to_string()
+
+    call test_case_create('To string')
+
+    call assert_equal(to_string(1), '1', __FILE__, __LINE__)
+    call assert_equal(len(to_string(1)), 1, __FILE__, __LINE__)
+
+    call assert_equal(to_string(-2), '-2', __FILE__, __LINE__)
+    call assert_equal(len(to_string(-2)), 2, __FILE__, __LINE__)
+
+    call assert_equal(to_string(.true.), 'true', __FILE__, __LINE__)
+    call assert_equal(len(to_string(.true.)), 4, __FILE__, __LINE__)
+
+    call assert_equal(to_string(1.245343, 4, 2), '1.25', __FILE__, __LINE__)
+    call assert_equal(len(to_string(1.245343, 4, 2)), 4, __FILE__, __LINE__)
+
+    call assert_equal(to_string([1.0d0, 2.0d0, 3.0d0], 3, 1), '[1.0,2.0,3.0]', __FILE__, __LINE__)
+    call assert_equal(len(to_string([1.0d0, 2.0d0, 3.0d0], 3, 1)), 13, __FILE__, __LINE__)
+
+  end subroutine test_string_to_string
 
 end program string_test
