@@ -10,6 +10,7 @@ module string_actions_mod
   public split_string
   public pad_string
   public replace_string
+  public delete_string
   public dirname
   public basename
 
@@ -25,6 +26,10 @@ module string_actions_mod
     module procedure replace_string_1
     module procedure replace_string_2
   end interface replace_string
+
+  interface delete_string
+    module procedure delete_string_1
+  end interface delete_string
 
   interface dirname
     module procedure dirname_1
@@ -146,6 +151,16 @@ contains
     res = replace_string_1(str%value, pattern, replace)
 
   end function replace_string_2
+
+  pure function delete_string_1(str, pattern) result(res)
+
+    character(*), intent(in) :: str
+    character(*), intent(in) :: pattern
+    character(:), allocatable :: res
+
+    res = replace_string(str, pattern, '')
+
+  end function delete_string_1
 
   pure function dirname_1(file_path) result(res)
 

@@ -11,6 +11,8 @@ program string_test
 
   call test_string_replace()
 
+  call test_string_delete()
+
   call test_string_split()
 
   call test_string_basename()
@@ -54,6 +56,14 @@ contains
     call assert_equal(replace_string('data.txt', '.txt', ''), 'data', __FILE__, __LINE__)
 
   end subroutine test_string_replace
+
+  subroutine test_string_delete()
+
+    call test_case_create('String delete')
+
+    call assert_equal(delete_string('data.nc', '.nc'), 'data', __FILE__, __LINE__)
+
+  end subroutine test_string_delete
 
   subroutine test_string_split()
 
