@@ -5,6 +5,7 @@ module string_numerics_mod
   private
 
   public to_string
+  public to_integer
 
   interface to_string
     module procedure integer1_to_string
