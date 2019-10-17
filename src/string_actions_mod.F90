@@ -20,6 +20,7 @@ module string_actions_mod
 
   interface split_string
     module procedure split_string_1
+    module procedure split_string_2
   end interface split_string
 
   interface replace_string
@@ -63,20 +64,20 @@ contains
 
   end function count_string_1
 
-  pure function split_string_1(str, separator) result(res)
+  pure function split_string_1(str, delim) result(res)
 
     character(*), intent(in) :: str
-    character(*), intent(in) :: separator
+    character(*), intent(in) :: delim
     type(string_type), allocatable :: res(:)
 
     integer num_field, len_field, len_sep
     integer i1, i2
 
-    len_sep = len_trim(separator)
+    len_sep = len(delim)
 
     num_field = 0; i1 = 1; i2 = 1
     do while (i2 <= len_trim(str))
-      if (str(i2:i2+len_sep-1) == separator) then
+      if (str(i2:i2+len_sep-1) == delim) then
         if (i2 > 1) num_field = num_field + 1
         i2 = i2 + len_sep
         i1 = i2
@@ -92,11 +93,10 @@ contains
 
     num_field = 0; i1 = 1; i2 = 1
     do while (i2 <= len_trim(str))
-      if (str(i2:i2+len_sep-1) == separator) then
+      if (str(i2:i2+len_sep-1) == delim) then
         if (i2 > 1) then
           num_field = num_field + 1
           res(num_field) = str(i1:i2-1)
-          ! print *, '#1 ', max_len_field, num_field, i1, i2-1, trim(res(num_field))
         end if
         i2 = i2 + len_sep
         i1 = i2
@@ -104,7 +104,6 @@ contains
         if (i1 > 0) then
           num_field = num_field + 1
           res(num_field) = str(i1:i2)
-          ! print *, '#2 ', max_len_field, num_field, i1, i2, trim(res(num_field))
         end if
         exit
       else
@@ -113,6 +112,21 @@ contains
     end do
 
   end function split_string_1
+
+  pure function split_string_2(str, delim, index) result(res)
+
+    character(*), intent(in) :: str
+    character(*), intent(in) :: delim
+    integer, intent(in) :: index
+    character(:), allocatable :: res
+
+    type(string_type), allocatable :: tmp(:)
+
+    tmp = split_string_1(str, delim)
+
+    res = trim(tmp(index)%value)
+
+  end function split_string_2
 
   pure function pad_string(str, width) result(res)
 

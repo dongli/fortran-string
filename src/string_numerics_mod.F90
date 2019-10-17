@@ -87,15 +87,20 @@ contains
 
     real(4), intent(in) :: x
     integer, intent(in) :: width
-    integer, intent(in) :: decimal_width
+    integer, intent(in), optional :: decimal_width
     character(:), allocatable :: res
 
     integer w
     character(10) fmt
-    character(range(x)+2) tmp
+    character(range(x)+4) tmp
 
-    w = max(width, decimal_width + 1 + 5)
-    write(fmt, "('(g', i0, '.', i0, ')')") w, decimal_width + 1
+    if (present(decimal_width)) then
+      w = max(width, decimal_width + 1 + 5)
+      write(fmt, "('(g', i0, '.', i0, ')')") w, decimal_width + 1
+    else
+      w = width
+      write(fmt, "('(g', i0, '.', i0, ')')") w, w - 6
+    end if
     write(tmp, fmt) x
     res = trim(tmp)
 
@@ -105,15 +110,20 @@ contains
 
     real(8), intent(in) :: x
     integer, intent(in) :: width
-    integer, intent(in) :: decimal_width
+    integer, intent(in), optional :: decimal_width
     character(:), allocatable :: res
 
     integer w
     character(10) fmt
-    character(range(x)+2) tmp
+    character(range(x)+4) tmp
 
-    w = max(width, decimal_width + 1 + 5)
-    write(fmt, "('(g', i0, '.', i0, ')')") w, decimal_width + 1
+    if (present(decimal_width)) then
+      w = max(width, decimal_width + 1 + 5)
+      write(fmt, "('(g', i0, '.', i0, ')')") w, decimal_width + 1
+    else
+      w = width
+      write(fmt, "('(g', i0, '.', i0, ')')") w, w - 6
+    end if
     write(tmp, fmt) x
     res = trim(tmp)
 
@@ -123,14 +133,16 @@ contains
 
     real(8), intent(in) :: x(:)
     integer, intent(in) :: width
-    integer, intent(in) :: decimal_width
+    integer, intent(in), optional :: decimal_width
     character(:), allocatable :: res
 
     integer w, i, j
     character(256) s
     character(:), allocatable :: tmp
 
-    w = max(width, decimal_width + 1 + 5)
+    if (present(decimal_width)) then
+      w = max(width, decimal_width + 1 + 5)
+    end if
     allocate(character(2+(w+1)*size(x)-1)::tmp)
     tmp(2:len(tmp)) = ''
     tmp(1:1) = '['
