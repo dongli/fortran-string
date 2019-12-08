@@ -6,6 +6,8 @@ module string_numerics_mod
 
   public to_string
   public to_integer
+  public to_float
+  public to_double
 
   interface to_string
     module procedure integer1_to_string
@@ -178,5 +180,21 @@ contains
     read(x, *) res
 
   end function to_integer
+
+  pure real(4) function to_float(x) result(res)
+
+    character(*), intent(in) :: x
+
+    read(x, *) res
+
+  end function to_float
+
+  pure real(8) function to_double(x) result(res)
+
+    character(*), intent(in) :: x
+
+    read(x, *) res
+
+  end function to_double
 
 end module string_numerics_mod
