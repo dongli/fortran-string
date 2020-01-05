@@ -47,14 +47,21 @@ contains
 
   end function integer2_to_string
   
-  pure function integer4_to_string(x) result(res)
+  pure function integer4_to_string(x, pad_zeros) result(res)
 
     integer(4), intent(in) :: x
+    integer, intent(in), optional :: pad_zeros
     character(:), allocatable :: res
 
     character(range(x)+2) tmp
+    character(256) fmt
 
-    write(tmp, '(i0)') x
+    if (merge(pad_zeros, 0, present(pad_zeros)) > 0) then
+      write(fmt, '("(I0.", I0, ")")') pad_zeros
+      write(tmp, fmt) x
+    else
+      write(tmp, '(i0)') x
+    end if
     res = trim(tmp)
 
   end function integer4_to_string
