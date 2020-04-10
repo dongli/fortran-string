@@ -75,6 +75,7 @@ contains
 
     call assert_equal(count_string('a,b,d,d', ','), 3, __FILE__, __LINE__)
     call assert_equal(count_string('a//b//c', '//'), 2, __FILE__, __LINE__)
+    call assert_equal(count_string('a b c', ' '), 2, __FILE__, __LINE__)
 
     fields = split_string('abc,,', ',')
     call assert_equal(size(fields), 2)

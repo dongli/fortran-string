@@ -49,7 +49,7 @@ contains
 
     integer i, len_pat
 
-    len_pat = len_trim(pattern)
+    len_pat = len(pattern)
     res = 0
     i = 1
     do while (i <= len_trim(str))
@@ -149,9 +149,9 @@ contains
 
     i = index(str, pattern)
 
-    allocate(character((len_trim(str)-len_trim(pattern)+len_trim(replace)))::res)
+    allocate(character((len_trim(str)-len(pattern)+len_trim(replace)))::res)
 
-    res = str(1:i-1) // trim(replace) // str(i+len_trim(pattern):len_trim(str))
+    res = str(1:i-1) // trim(replace) // str(i+len(pattern):len_trim(str))
 
   end function replace_string_1
 
