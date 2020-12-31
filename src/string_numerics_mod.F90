@@ -4,26 +4,26 @@ module string_numerics_mod
 
   private
 
-  public to_string
-  public to_integer
-  public to_float
-  public to_double
+  public to_str
+  public to_int
+  public to_r4
+  public to_r8
 
-  interface to_string
-    module procedure integer1_to_string
-    module procedure integer2_to_string
-    module procedure integer4_to_string
-    module procedure integer8_to_string
-    module procedure integer4_array_to_string
-    module procedure real4_to_string
-    module procedure real8_to_string
-    module procedure real8_array_to_string
-    module procedure logical_to_string
-  end interface to_string
+  interface to_str
+    module procedure i1_to_str
+    module procedure i2_to_str
+    module procedure i4_to_str
+    module procedure i8_to_str
+    module procedure i4_array_to_str
+    module procedure r4_to_str
+    module procedure r8_to_str
+    module procedure r8_array_to_str
+    module procedure l_to_str
+  end interface to_str
 
 contains
 
-  pure function integer1_to_string(x) result(res)
+  pure function i1_to_str(x) result(res)
 
     integer(1), intent(in) :: x
     character(:), allocatable :: res
@@ -33,9 +33,9 @@ contains
     write(tmp, '(i0)') x
     res = trim(tmp)
 
-  end function integer1_to_string
+  end function i1_to_str
   
-  pure function integer2_to_string(x) result(res)
+  pure function i2_to_str(x) result(res)
 
     integer(2), intent(in) :: x
     character(:), allocatable :: res
@@ -45,9 +45,9 @@ contains
     write(tmp, '(i0)') x
     res = trim(tmp)
 
-  end function integer2_to_string
+  end function i2_to_str
   
-  pure function integer4_to_string(x, pad_zeros) result(res)
+  pure function i4_to_str(x, pad_zeros) result(res)
 
     integer(4), intent(in) :: x
     integer, intent(in), optional :: pad_zeros
@@ -56,17 +56,21 @@ contains
     character(range(x)+2) tmp
     character(256) fmt
 
-    if (merge(pad_zeros, 0, present(pad_zeros)) > 0) then
-      write(fmt, '("(I0.", I0, ")")') pad_zeros
-      write(tmp, fmt) x
+    if (present(pad_zeros)) then
+      if (pad_zeros > 0) then
+        write(fmt, '("(i0.", i0, ")")') pad_zeros
+        write(tmp, fmt) x
+      else
+        write(tmp, '(i0)') x
+      end if
     else
       write(tmp, '(i0)') x
     end if
     res = trim(tmp)
 
-  end function integer4_to_string
+  end function i4_to_str
   
-  pure function integer8_to_string(x) result(res)
+  pure function i8_to_str(x) result(res)
 
     integer(8), intent(in) :: x
     character(:), allocatable :: res
@@ -76,9 +80,9 @@ contains
     write(tmp, '(i0)') x
     res = trim(tmp)
 
-  end function integer8_to_string
+  end function i8_to_str
 
-  pure function integer4_array_to_string(x) result(res)
+  pure function i4_array_to_str(x) result(res)
 
     integer(4), intent(in) :: x(:)
     character(:), allocatable :: res
@@ -90,9 +94,9 @@ contains
     write(tmp, fmt) x
     res = trim(tmp)
 
-  end function integer4_array_to_string
+  end function i4_array_to_str
 
-  pure function real4_to_string(x, decimal_width, width) result(res)
+  pure function r4_to_str(x, decimal_width, width) result(res)
 
     real(4), intent(in) :: x
     integer, intent(in) :: decimal_width
@@ -112,9 +116,9 @@ contains
     write(tmp, fmt) x
     res = trim(adjustl(tmp))
 
-  end function real4_to_string
+  end function r4_to_str
 
-  pure function real8_to_string(x, decimal_width, width) result(res)
+  pure function r8_to_str(x, decimal_width, width) result(res)
 
     real(8), intent(in) :: x
     integer, intent(in) :: decimal_width
@@ -134,9 +138,9 @@ contains
     write(tmp, fmt) x
     res = trim(adjustl(tmp))
 
-  end function real8_to_string
+  end function r8_to_str
 
-  pure function real8_array_to_string(x, decimal_width, width) result(res)
+  pure function r8_array_to_str(x, decimal_width, width) result(res)
 
     real(8), intent(in) :: x(:)
     integer, intent(in) :: decimal_width
@@ -157,7 +161,7 @@ contains
     tmp(1:1) = '['
     j = 2
     do i = 1, size(x)
-      s = to_string(x(i), decimal_width, width)
+      s = to_str(x(i), decimal_width, width)
       tmp(j:j+len_trim(s)-1) = trim(s)
       j = j + len_trim(s)
       if (i /= size(x)) then
@@ -169,39 +173,39 @@ contains
     res = trim(tmp)
     deallocate(tmp)
 
-  end function real8_array_to_string
+  end function r8_array_to_str
 
-  pure function logical_to_string(x) result(res)
+  pure function l_to_str(x) result(res)
 
     logical, intent(in) :: x
     character(:), allocatable :: res
 
     res = trim(merge('true ', 'false', x))
 
-  end function logical_to_string
+  end function l_to_str
 
-  pure integer function to_integer(x) result(res)
-
-    character(*), intent(in) :: x
-
-    read(x, *) res
-
-  end function to_integer
-
-  pure real(4) function to_float(x) result(res)
+  pure integer function to_int(x) result(res)
 
     character(*), intent(in) :: x
 
     read(x, *) res
 
-  end function to_float
+  end function to_int
 
-  pure real(8) function to_double(x) result(res)
+  pure real(4) function to_r4(x) result(res)
 
     character(*), intent(in) :: x
 
     read(x, *) res
 
-  end function to_double
+  end function to_r4
+
+  pure real(8) function to_r8(x) result(res)
+
+    character(*), intent(in) :: x
+
+    read(x, *) res
+
+  end function to_r8
 
 end module string_numerics_mod

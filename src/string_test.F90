@@ -17,7 +17,7 @@ program string_test
 
   call test_string_basename()
 
-  call test_string_to_string()
+  call test_string_to_str()
 
   call test_suite_report()
 
@@ -105,27 +105,27 @@ contains
 
   end subroutine test_string_basename
 
-  subroutine test_string_to_string()
+  subroutine test_string_to_str()
 
     call test_case_create('To string')
 
-    call assert_equal(to_string(1), '1', __FILE__, __LINE__)
-    call assert_equal(len(to_string(1)), 1, __FILE__, __LINE__)
+    call assert_equal(to_str(1), '1', __FILE__, __LINE__)
+    call assert_equal(len(to_str(1)), 1, __FILE__, __LINE__)
 
-    call assert_equal(to_string(-2), '-2', __FILE__, __LINE__)
-    call assert_equal(len(to_string(-2)), 2, __FILE__, __LINE__)
+    call assert_equal(to_str(-2), '-2', __FILE__, __LINE__)
+    call assert_equal(len(to_str(-2)), 2, __FILE__, __LINE__)
 
-    call assert_equal(to_string(.true.), 'true', __FILE__, __LINE__)
-    call assert_equal(len(to_string(.true.)), 4, __FILE__, __LINE__)
+    call assert_equal(to_str(.true.), 'true', __FILE__, __LINE__)
+    call assert_equal(len(to_str(.true.)), 4, __FILE__, __LINE__)
 
-    call assert_equal(to_string(1.245343, 2), '1.25', __FILE__, __LINE__)
-    call assert_equal(to_string(1.245343, 2, 4), '1.25', __FILE__, __LINE__)
-    call assert_equal(len(to_string(1.245343, 2, 4)), 4, __FILE__, __LINE__)
-    call assert_equal(to_string(1.323D33, 2), '0.132E+34', __FILE__, __LINE__)
+    call assert_equal(to_str(1.245343, 2), '1.25', __FILE__, __LINE__)
+    call assert_equal(to_str(1.245343, 2, 4), '1.25', __FILE__, __LINE__)
+    call assert_equal(len(to_str(1.245343, 2, 4)), 4, __FILE__, __LINE__)
+    call assert_equal(to_str(1.323D33, 2), '0.132E+34', __FILE__, __LINE__)
 
-    call assert_equal(to_string([1.0d0, 2.0d0, 3.0d0], 1), '[1.0,2.0,3.0]', __FILE__, __LINE__)
-    call assert_equal(len(to_string([1.0d0, 2.0d0, 3.0d0], 1)), 13, __FILE__, __LINE__)
+    call assert_equal(to_str([1.0d0, 2.0d0, 3.0d0], 1), '[1.0,2.0,3.0]', __FILE__, __LINE__)
+    call assert_equal(len(to_str([1.0d0, 2.0d0, 3.0d0], 1)), 13, __FILE__, __LINE__)
 
-  end subroutine test_string_to_string
+  end subroutine test_string_to_str
 
 end program string_test
