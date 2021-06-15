@@ -109,11 +109,13 @@ contains
 
     if (present(width)) then
       w = max(width, decimal_width + 1 + 6)
+      write(fmt, "('(G', I0, '.', I0, ')')") w, decimal_width + 1
+      write(tmp, fmt) x
     else
-      w = decimal_width + 1 + 6
+      write(tmp, "(I)") int(x * decimal_width * 10)
+      tmp = trim(tmp) // '.'
+      write(tmp(len_trim(tmp)+1:len_trim(tmp)+1+decimal_width), "(I)") int(x * decimal_width * 10) - int(x) * decimal_width * 10
     end if
-    write(fmt, "('(G', I0, '.', I0, ')')") w, decimal_width + 1
-    write(tmp, fmt) x
     res = trim(adjustl(tmp))
 
   end function r4_to_str
@@ -127,16 +129,18 @@ contains
 
     integer w
     character(10) fmt
-    character(range(x)+2) tmp
+    character(range(x)+2) tmp1, tmp2
 
     if (present(width)) then
       w = max(width, decimal_width + 1 + 6)
+      write(fmt, "('(G', I0, '.', I0, ')')") w, decimal_width + 1
+      write(tmp1, fmt) x
     else
-      w = decimal_width + 1 + 6
+      write(tmp1, "(I)") int(x)
+      write(tmp2, "(I)") abs(int(x * 10**decimal_width) - int(x) * 10**decimal_width)
+      tmp1 = trim(tmp1) // '.' // trim(adjustl(tmp2))
     end if
-    write(fmt, "('(G', I0, '.', I0, ')')") w, decimal_width + 1
-    write(tmp, fmt) x
-    res = trim(adjustl(tmp))
+    res = trim(adjustl(tmp1))
 
   end function r8_to_str
 
